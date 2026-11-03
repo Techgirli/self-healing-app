@@ -9,21 +9,20 @@ def home():
 
 @app.route("/health")
 def health():
-    # Standard health check endpoint for Docker / orchestration
     return jsonify({"status": "UP"}), 200
 
 @app.route("/stress")
 def stress():
-    # Intentionally spike CPU to simulate a runaway process or heavy load
-    end_time = time.time() + 15  # 15 seconds of intense computation
+    end_time = time.time() + 15
     while time.time() < end_time:
         _ = 999999 * 999999
     return jsonify({"status": "stressed", "message": "CPU spike completed."})
 
+from flask import Flask, jsonify, Response
+
+@app.route("/metrics")
+def metrics():
+    return Response("up 1\n", content_type="text/plain; version=0.0.4; charset=utf-8")   
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
-healthcheck:
-  test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/')"]
-  interval: 10s
-  timeout: 3s
-  retries: 3   
+    app.run(host="0.0.0.0", port=5000)   
