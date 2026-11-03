@@ -1,0 +1,10 @@
+groups:
+  - name: self_healing_alerts
+    rules:
+      - alert: ServiceDown
+        expr: up == 0
+        for: 5s
+        labels:
+          severity: critical
+        annotations:
+							description: "The web application container is down or unreachable."
