@@ -22,3 +22,8 @@ def stress():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+healthcheck:
+  test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/')"]
+  interval: 10s
+  timeout: 3s
+  retries: 3   
